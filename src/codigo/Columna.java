@@ -73,15 +73,18 @@ public class Columna {
         g2.setColor(Color.BLUE);
         
         
-        //g2.fill(base);
-        
         g2.drawImage(col_abajo, (int)base.getX(), (int)base.getY()-ancho_columna/2, null);
-        g2.drawImage(col_arriba, (int)capitel.getX(), (int)capitel.getY()-ancho_columna/2, null);
-        g2.fill(circuloInferior);
-        g2.fill(circuloSuperior);
-        g2.setColor(Color.PINK);
-        g2.fill(capitel);
-        g2.fill(base);
+        g2.drawImage(col_arriba, (int)capitel.getX(), (int)capitel.getY()+ancho_columna/2, null);
+       
+        
+       //oculto la fisica del juego
+//        g2.fill(circuloInferior);
+//        g2.fill(circuloSuperior);
+//        g2.setColor(Color.PINK);
+//        g2.fill(capitel);
+//        g2.fill(base);
+        
+     
     }
     
     private void mueveColumna(){

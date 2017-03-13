@@ -35,6 +35,9 @@ public class VentanaJuego extends javax.swing.JFrame {
     Columna miColumna3 = new Columna(ANCHOPANTALLA + 2*SEPARACION_COLUMNAS, ANCHOPANTALLA);
     //Columna miColumna4 = new Columna(ANCHOPANTALLA + 3*SEPARACION_COLUMNAS, ANCHOPANTALLA);
     
+    Suelo miSuelo1 = new Suelo(0, ALTOPANTALLA * 0.60);
+    Suelo miSuelo2 = new Suelo(miSuelo1.getWidth(), ALTOPANTALLA * 0.60);
+    
     BufferedImage buffer = null;
 
     
@@ -71,9 +74,9 @@ public class VentanaJuego extends javax.swing.JFrame {
     }
     
     private void bucleDelJuego(){
-        if (miPajaro.chequeaColision(miColumna1)){temporizador.stop();}
-        if (miPajaro.chequeaColision(miColumna2)){temporizador.stop();}
-        if (miPajaro.chequeaColision(miColumna3)){temporizador.stop();}
+        //if (miPajaro.chequeaColision(miColumna1)){temporizador.stop();}
+        //if (miPajaro.chequeaColision(miColumna2)){temporizador.stop();}
+        //if (miPajaro.chequeaColision(miColumna3)){temporizador.stop();}
         
         //limpio la pantalla
         bufferGraphics.setColor(Color.BLACK);
@@ -83,6 +86,8 @@ public class VentanaJuego extends javax.swing.JFrame {
         miColumna1.mueve(bufferGraphics);
         miColumna2.mueve(bufferGraphics);
         miColumna3.mueve(bufferGraphics);
+        miSuelo1.mueve(bufferGraphics);
+        miSuelo2.mueve(bufferGraphics);
         //miColumna4.mueve(bufferGraphics);
         
         lienzoGraphics.drawImage(buffer, 0,0, null);
