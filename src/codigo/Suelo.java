@@ -34,7 +34,7 @@ public class Suelo extends Rectangle2D.Double{
         this.x--;
         g2.drawImage(imagenSuelo,(int)this.x, (int)this.y, null);
         if (this.x <= -this.width){
-            this.x = this.width*2;
+            this.x = this.width;
         }
 //        g2.setColor(Color.red);
 //        g2.fill(this);

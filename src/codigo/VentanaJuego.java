@@ -7,13 +7,12 @@ package codigo;
 
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
 /**
@@ -28,7 +27,9 @@ public class VentanaJuego extends javax.swing.JFrame {
 
     static int ANCHOPANTALLA = 400;
     static int ALTOPANTALLA = 750;
-    static int SEPARACION_COLUMNAS = 150;
+    static int SEPARACION_COLUMNAS = 170 ;
+    Double distancia = -140.0;
+    int puntuacion = 0;
     
     Columna miColumna1 = new Columna(ANCHOPANTALLA , ANCHOPANTALLA);
     Columna miColumna2 = new Columna(ANCHOPANTALLA + SEPARACION_COLUMNAS, ANCHOPANTALLA);
@@ -74,22 +75,30 @@ public class VentanaJuego extends javax.swing.JFrame {
     }
     
     private void bucleDelJuego(){
-        //if (miPajaro.chequeaColision(miColumna1)){temporizador.stop();}
-        //if (miPajaro.chequeaColision(miColumna2)){temporizador.stop();}
-        //if (miPajaro.chequeaColision(miColumna3)){temporizador.stop();}
-        
+        if (miPajaro.chequeaColision(miColumna1)){temporizador.stop();}
+        if (miPajaro.chequeaColision(miColumna2)){temporizador.stop();}
+        if (miPajaro.chequeaColision(miColumna3)){temporizador.stop();}
+
         //limpio la pantalla
         bufferGraphics.setColor(Color.BLACK);
         bufferGraphics.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA); 
         //dibujo el pájaro en su nueva posición
         miPajaro.mueve(bufferGraphics);
-        miColumna1.mueve(bufferGraphics);
-        miColumna2.mueve(bufferGraphics);
-        miColumna3.mueve(bufferGraphics);
+        if (miColumna1.mueve(bufferGraphics, miPajaro)){
+            puntuacion++;
+        }
+        if (miColumna2.mueve(bufferGraphics, miPajaro)){
+            puntuacion++;
+        }
+        if (miColumna3.mueve(bufferGraphics, miPajaro)){
+            puntuacion++;
+        }
+        
         miSuelo1.mueve(bufferGraphics);
         miSuelo2.mueve(bufferGraphics);
         //miColumna4.mueve(bufferGraphics);
-        
+        bufferGraphics.setFont(new Font("Courier New", Font.BOLD, 80)); 
+        bufferGraphics.drawString(" " + puntuacion, ANCHOPANTALLA/2, 70);
         lienzoGraphics.drawImage(buffer, 0,0, null);
     }
     
@@ -141,7 +150,7 @@ public class VentanaJuego extends javax.swing.JFrame {
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
        if (evt.getKeyCode() == KeyEvent.VK_SPACE){
-           miPajaro.yVelocidad += 8;
+           miPajaro.yVelocidad += 9;
        }
     }//GEN-LAST:event_formKeyPressed
 

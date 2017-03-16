@@ -22,15 +22,21 @@ public class Columna {
     
     Rectangle2D capitel, base;
     Ellipse2D circuloInferior, circuloSuperior;
-    int hueco = 80;
+    int hueco = 120;
     int altura_columna = 500;
     int ancho_columna = 79;
     private int ancho_pantalla;
     Image col_abajo, col_arriba;
         
-    public Columna (int _ancho, int _anchoPantalla){
+    public Columna (int _ancho, int _anchoPantalla){       
+        posicionInicialColumna(_ancho);
+        ancho_pantalla = _anchoPantalla;
+        precargaImagenes();
+    }
+    
+    private void posicionInicialColumna(int _ancho){
         Random aleatorio = new Random();
-        int desplazamiento = aleatorio.nextInt(300);
+        int desplazamiento = aleatorio.nextInt(200)+200;
         capitel = new Rectangle2D.Double(_ancho, 
                                         -desplazamiento - ancho_columna/2, 
                                         ancho_columna, 
@@ -45,12 +51,10 @@ public class Columna {
                                                 ancho_columna
                                                     );
         circuloSuperior = new Ellipse2D.Double(_ancho,
-                                                altura_columna - desplazamiento - hueco ,
+                                                altura_columna - desplazamiento - hueco + ancho_columna/2,
                                                 ancho_columna,
                                                 ancho_columna
                                                     );
-        ancho_pantalla = _anchoPantalla;
-        precargaImagenes();
     }
     
     private void precargaImagenes(){
@@ -66,17 +70,15 @@ public class Columna {
         
     }
     
-    public void mueve(Graphics2D g2){
+    public boolean mueve(Graphics2D g2, Pajaro p){
         mueveColumna();
-        //mueveColumna(base);
-
         g2.setColor(Color.BLUE);
-        
         
         g2.drawImage(col_abajo, (int)base.getX(), (int)base.getY()-ancho_columna/2, null);
         g2.drawImage(col_arriba, (int)capitel.getX(), (int)capitel.getY()+ancho_columna/2, null);
        
-        
+        //si el pájaro está en la columna, subo 1 el marcador
+        return (capitel.getX() == p.x);
        //oculto la fisica del juego
 //        g2.fill(circuloInferior);
 //        g2.fill(circuloSuperior);
@@ -88,33 +90,16 @@ public class Columna {
     }
     
     private void mueveColumna(){
+        
         if (capitel.getX() + ancho_columna < 0){
-            Random aleatorio = new Random();
-            int desplazamiento = aleatorio.nextInt(300);
-            capitel.setFrame(ancho_pantalla, 
-                            -desplazamiento - ancho_columna/2,
-                            capitel.getWidth(), 
-                            capitel.getHeight());
-            base.setFrame(ancho_pantalla, 
-                            altura_columna + hueco - desplazamiento + ancho_columna/2,
-                            base.getWidth(), 
-                            base.getHeight());
-            circuloInferior.setFrame(ancho_pantalla, 
-                                        altura_columna + hueco - desplazamiento,
-                                        ancho_columna,
-                                        ancho_columna
-                                            );
-            circuloSuperior.setFrame(ancho_pantalla, 
-                                        altura_columna - desplazamiento - hueco ,
-                                        ancho_columna,
-                                        ancho_columna
-                                            );
+            posicionInicialColumna(ancho_pantalla);
         }
         else{
             capitel.setFrame(capitel.getX()-1, capitel.getY(),capitel.getWidth(), capitel.getHeight());
             base.setFrame(base.getX()-1, base.getY(),base.getWidth(), base.getHeight());
             circuloInferior.setFrame(circuloInferior.getX()-1, circuloInferior.getY(),circuloInferior.getWidth(), circuloInferior.getHeight());
             circuloSuperior.setFrame(circuloSuperior.getX()-1, circuloSuperior.getY(),circuloSuperior.getWidth(), circuloSuperior.getHeight());
+            
         }
     }
 }
