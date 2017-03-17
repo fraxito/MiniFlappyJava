@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
 /**
@@ -30,7 +32,9 @@ public class VentanaJuego extends javax.swing.JFrame {
     static int SEPARACION_COLUMNAS = 170 ;
     int numColumnas = 3;
     int puntuacion = 0;
-    
+    //imagenes de los adornos
+    Image matorrales, nubes;
+    int posicionMatorralesY = 0;
     //array de columnas
     Columna[] columnas = new Columna[numColumnas];
 
@@ -61,7 +65,10 @@ public class VentanaJuego extends javax.swing.JFrame {
         }
     }
     
-
+    private Image cargaImagen(String nombreImagen, double altoImagen){
+        return (new ImageIcon(new ImageIcon(getClass().getResource(nombreImagen))
+                .getImage().getScaledInstance(ANCHOPANTALLA, (int) altoImagen, Image.SCALE_DEFAULT))).getImage();
+    }
     
     private void inicializaBuffers(){
         lienzoGraphics = (Graphics2D) jPanel1.getGraphics();
@@ -70,15 +77,22 @@ public class VentanaJuego extends javax.swing.JFrame {
         
         bufferGraphics.setColor(Color.BLACK);
         bufferGraphics.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
+        //carga las imagenes de los adornos
+        
+        matorrales = cargaImagen("/imagenes/bush.png", ALTOPANTALLA*0.05);
+        nubes = cargaImagen("/imagenes/clouds.png", ALTOPANTALLA*0.10);
+        posicionMatorralesY = (int)(ALTOPANTALLA * 0.60)-matorrales.getHeight(null);
     }
     
     private void bucleDelJuego(){
         //limpio la pantalla
-        bufferGraphics.setColor(Color.BLACK);
+        bufferGraphics.setColor(new Color(113, 198, 205)); //el color original del flappy bird
         bufferGraphics.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA); 
+        bufferGraphics.drawImage(matorrales, 0,posicionMatorralesY, null);
+        bufferGraphics.drawImage(nubes, 0,0, null);
         //dibujo el pájaro en su nueva posición
         miPajaro.mueve(bufferGraphics);
-        //desplazo las columnas a la izquierda. Si alguna choca, incremento en 1 el marcador
+        //desplazo las columnas a la izquierda. Si alguna coincide con la posicion del pajaro, incremento en 1 el marcador
         for (int i=0; i<numColumnas; i++){
             if (columnas[i].mueve(bufferGraphics, miPajaro)){
                 puntuacion++;
@@ -89,7 +103,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         miSuelo2.mueve(bufferGraphics);
         //dibuja el marcador
         bufferGraphics.setFont(new Font("Courier New", Font.BOLD, 80)); 
-        bufferGraphics.drawString(" " + puntuacion, ANCHOPANTALLA/2, 70);
+        bufferGraphics.drawString(" " + puntuacion, ANCHOPANTALLA/3, 70);
         //dibuja el resultado
         lienzoGraphics.drawImage(buffer, 0,0, null);
         
@@ -121,7 +135,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 615, Short.MAX_VALUE)
+            .addGap(0, 390, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
