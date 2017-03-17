@@ -78,6 +78,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         bufferGraphics.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA); 
         //dibujo el pájaro en su nueva posición
         miPajaro.mueve(bufferGraphics);
+        //desplazo las columnas a la izquierda. Si alguna choca, incremento en 1 el marcador
         for (int i=0; i<numColumnas; i++){
             if (columnas[i].mueve(bufferGraphics, miPajaro)){
                 puntuacion++;
