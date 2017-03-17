@@ -28,24 +28,20 @@ public class VentanaJuego extends javax.swing.JFrame {
     static int ANCHOPANTALLA = 400;
     static int ALTOPANTALLA = 750;
     static int SEPARACION_COLUMNAS = 170 ;
-    Double distancia = -140.0;
+    int numColumnas = 3;
     int puntuacion = 0;
     
-    Columna miColumna1 = new Columna(ANCHOPANTALLA , ANCHOPANTALLA);
-    Columna miColumna2 = new Columna(ANCHOPANTALLA + SEPARACION_COLUMNAS, ANCHOPANTALLA);
-    Columna miColumna3 = new Columna(ANCHOPANTALLA + 2*SEPARACION_COLUMNAS, ANCHOPANTALLA);
-    //Columna miColumna4 = new Columna(ANCHOPANTALLA + 3*SEPARACION_COLUMNAS, ANCHOPANTALLA);
-    
+    //array de columnas
+    Columna[] columnas = new Columna[numColumnas];
+
+    //los dos suelos para hacer el truco de que parezca infinito
     Suelo miSuelo1 = new Suelo(0, ALTOPANTALLA * 0.60);
     Suelo miSuelo2 = new Suelo(miSuelo1.getWidth(), ALTOPANTALLA * 0.60);
     
     BufferedImage buffer = null;
-
-    
     Graphics2D bufferGraphics, lienzoGraphics = null;
-    
-    int contador = 0;
-    
+
+    //TEMPORIZADOR DEL JUEGO: AQUI SE LLAMA A LA ANIMACIÓN
     Timer temporizador = new Timer(10,new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e){
@@ -60,7 +56,9 @@ public class VentanaJuego extends javax.swing.JFrame {
         initComponents();
         inicializaBuffers();
         temporizador.start();
-        
+        for (int i=0; i<numColumnas; i++){
+            columnas[i] = new Columna(ANCHOPANTALLA + i*SEPARACION_COLUMNAS, ANCHOPANTALLA);
+        }
     }
     
 
@@ -75,31 +73,29 @@ public class VentanaJuego extends javax.swing.JFrame {
     }
     
     private void bucleDelJuego(){
-        if (miPajaro.chequeaColision(miColumna1)){temporizador.stop();}
-        if (miPajaro.chequeaColision(miColumna2)){temporizador.stop();}
-        if (miPajaro.chequeaColision(miColumna3)){temporizador.stop();}
-
         //limpio la pantalla
         bufferGraphics.setColor(Color.BLACK);
         bufferGraphics.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA); 
         //dibujo el pájaro en su nueva posición
         miPajaro.mueve(bufferGraphics);
-        if (miColumna1.mueve(bufferGraphics, miPajaro)){
-            puntuacion++;
+        for (int i=0; i<numColumnas; i++){
+            if (columnas[i].mueve(bufferGraphics, miPajaro)){
+                puntuacion++;
+            }
         }
-        if (miColumna2.mueve(bufferGraphics, miPajaro)){
-            puntuacion++;
-        }
-        if (miColumna3.mueve(bufferGraphics, miPajaro)){
-            puntuacion++;
-        }
-        
+        //avanza el suelo 
         miSuelo1.mueve(bufferGraphics);
         miSuelo2.mueve(bufferGraphics);
-        //miColumna4.mueve(bufferGraphics);
+        //dibuja el marcador
         bufferGraphics.setFont(new Font("Courier New", Font.BOLD, 80)); 
         bufferGraphics.drawString(" " + puntuacion, ANCHOPANTALLA/2, 70);
+        //dibuja el resultado
         lienzoGraphics.drawImage(buffer, 0,0, null);
+        
+                //chequea si ha chocado con alguna columna
+        for (int i=0; i<numColumnas; i++){
+            if (miPajaro.chequeaColision(columnas[i])){temporizador.stop();}
+        }
     }
     
     /**
