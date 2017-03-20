@@ -25,13 +25,14 @@ public class VentanaJuego extends javax.swing.JFrame {
     
     boolean gameOver = false;
     
-    Pajaro miPajaro = new Pajaro(30, Color.WHITE);
+    Pajaro miPajaro = new Pajaro(30);
 
     static int ANCHOPANTALLA = 400;
     static int ALTOPANTALLA = 750;
     static int SEPARACION_COLUMNAS = 170 ;
     int numColumnas = 3;
     int puntuacion = 0;
+    int contadorAnimacion = 0;
     //imagenes de los adornos
     Image matorrales, nubes;
     int posicionMatorralesY = 0;
@@ -85,13 +86,15 @@ public class VentanaJuego extends javax.swing.JFrame {
     }
     
     private void bucleDelJuego(){
+        contadorAnimacion++;
+        if (contadorAnimacion > 30) {contadorAnimacion = 0;}
         //limpio la pantalla
         bufferGraphics.setColor(new Color(113, 198, 205)); //el color original del flappy bird
         bufferGraphics.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA); 
         bufferGraphics.drawImage(matorrales, 0,posicionMatorralesY, null);
         bufferGraphics.drawImage(nubes, 0,0, null);
         //dibujo el pájaro en su nueva posición
-        miPajaro.mueve(bufferGraphics);
+        miPajaro.mueve(bufferGraphics, contadorAnimacion);
         //desplazo las columnas a la izquierda. Si alguna coincide con la posicion del pajaro, incremento en 1 el marcador
         for (int i=0; i<numColumnas; i++){
             if (columnas[i].mueve(bufferGraphics, miPajaro)){
@@ -161,7 +164,7 @@ public class VentanaJuego extends javax.swing.JFrame {
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
        if (evt.getKeyCode() == KeyEvent.VK_SPACE){
-           miPajaro.yVelocidad += 9;
+           miPajaro.sube();
        }
     }//GEN-LAST:event_formKeyPressed
 
